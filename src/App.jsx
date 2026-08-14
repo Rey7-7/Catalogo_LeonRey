@@ -1,9 +1,26 @@
 import './App.css'
 import ProductCard from './components/ProductCard'
 import { products } from './data/products'
+import { useEffect, useState } from 'react'
+import { getProducts } from './services/productService'
 
 function App() {
 
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    async function loadProducts(){
+       const data = await getProducts()
+       setProducts(data)
+       setLoading(false)
+
+       console.log(data)
+    }
+      loadProducts()
+  }, [])
+ 
   return (
     <div className='app'>
       <header className='header'>

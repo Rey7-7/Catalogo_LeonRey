@@ -102,4 +102,23 @@ export const productType = defineType({
             validation: (Rule) => Rule.required().min(1).max(6),
         }),
     ],
+
+    preview:{
+        select: {
+            title: 'name',
+            price: 'price',
+            inStock: 'inStock',
+            media: 'images.0',
+        },
+
+        prepare({title, price, inStock, media}) {
+            const stockState = inStock ? 'Disponible' : 'Agotado'
+
+            return{
+                title: title,
+                subtitle: `$${price} - ${stockState}`, 
+                media: media
+            }
+        }
+    }
 })
