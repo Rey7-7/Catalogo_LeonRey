@@ -3,20 +3,40 @@ import ProductCard from './components/ProductCard'
 import { products } from './data/products'
 import { useEffect, useState } from 'react'
 import { getProducts } from './services/productService'
+import SearchBar from './components/SearchBar'
 
 function App() {
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const filteredProducts = products.filter((product) => {
+    const nombre = product.name.toLowerCase()
+    const busqueda = searchTerm.toLowerCase()
+
+    if (nombre.includes(busqueda)) return true
+
+    return false
+  })
 
   useEffect(() => {
     async function loadProducts(){
+      try
+      {
        const data = await getProducts()
        setProducts(data)
-       setLoading(false)
-
-       console.log(data)
+      }
+      catch(error)
+      {
+        console.error(error)
+        setError("No fue posible cargar los productos.")
+      }
+      finally
+      {
+        setLoading(false)
+      }
     }
       loadProducts()
   }, [])
@@ -36,12 +56,26 @@ function App() {
       <main className='catalog'>
         <h2>Nuestros productos</h2>
 
+        <SearchBar
+          value={searchTerm}
+          onSearchChange={setSearchTerm}
+        />
+
+        {loading ? (
+          <p>Cargando productos...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : products.length === 0 ? ( 
+          <p>No hay productos disponibles por el momento.</p>
+        ) : filteredProducts.length === 0 ? (
+          <p>No encontramos productos que coincidan con “{searchTerm}”.</p>
+        ) : (
         <div className="product-list">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}
               name={product.name}
-              description={product.description}
+              shortDescription={product.shortDescription}
               price={product.price}
               inStock={product.inStock}
               featured={product.featured}
@@ -49,7 +83,7 @@ function App() {
             />
           ))}
         </div>
-
+      )}
       </main>
 
       <footer className='footer'>

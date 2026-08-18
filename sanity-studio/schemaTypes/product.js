@@ -5,11 +5,28 @@ export const productType = defineType({
     title: 'Product',
     type: 'document',
 
+    groups: [
+        {
+        name: 'information',
+        title: 'Información',
+        default: true,
+        },
+        {
+        name: 'sales',
+        title: 'Venta',
+        },
+        {
+        name: 'media',
+        title: 'Imágenes',
+        },
+    ],
+
     fields: [
         defineField({
             name: 'name',
             title: 'Nombre',
             type: 'string',
+            group: 'information',
             validation: (Rule) => Rule.required().min(3).max(50),
         }),
 
@@ -17,6 +34,7 @@ export const productType = defineType({
             name: 'shortDescription',
             title: 'Descripción corta',
             type: 'string',
+            group: 'information',
             validation: (Rule) => Rule.required().min(10).max(150),
         }),
 
@@ -24,6 +42,7 @@ export const productType = defineType({
             name: 'description',
             title: 'Descripción',
             type: 'text',
+            group: 'information',
             validation: (Rule) => Rule.required().min(15).max(2000),
         }),
 
@@ -31,6 +50,7 @@ export const productType = defineType({
             name: 'price',
             title: 'Precio',
             type: 'number',
+            group: 'sales',
             validation: (Rule) => Rule.required().min(1),
         }),
 
@@ -38,6 +58,7 @@ export const productType = defineType({
             name: 'inStock',
             title: 'Disponible',
             type: 'boolean',
+            group: 'sales',
             initialValue: true,
         }),
 
@@ -45,6 +66,7 @@ export const productType = defineType({
             name: 'featured',
             title: 'Destacado',
             type: 'boolean',
+            group: 'sales',
             initialValue: false,
         }),
 
@@ -52,6 +74,8 @@ export const productType = defineType({
             name: 'slug',
             title: 'Dirección del producto',
             type: 'slug',
+            group: 'information',
+            description: 'Presiona “Generar” después de escribir el nombre.',   
             options: {
                 source: 'name',
                 maxLength: 96,
@@ -63,6 +87,7 @@ export const productType = defineType({
             name: 'category',
             title: 'Categoría',
             type: 'string',
+            group: 'information',
             options: {
                 list: [
                 { title: 'Electrónica', value: 'electronics' },
@@ -82,6 +107,8 @@ export const productType = defineType({
             name: 'images',
             title: 'Fotografías',
             type: 'array',
+            group: 'media',
+            description: 'La primera fotografía será la portada del producto.',
             of: [
                 {
                 type: 'image',

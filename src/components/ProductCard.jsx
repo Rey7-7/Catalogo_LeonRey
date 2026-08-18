@@ -1,4 +1,4 @@
-function ProductCard({name, description, price, inStock, featured, image}){
+function ProductCard({name, shortDescription, price, inStock, featured, image}){
 
 const phoneNumber = '5210000000000'
 
@@ -15,7 +15,7 @@ const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mess
             alt={name}
             />
             <h3>{name}</h3>
-            <p>{description}</p>
+            <p>{shortDescription}</p>
             <p className="product-price">Precio: ${price}</p>
             {inStock ? (
                 <a
