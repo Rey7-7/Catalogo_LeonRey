@@ -4,6 +4,8 @@ import { products } from './data/products'
 import { useEffect, useState } from 'react'
 import { getProducts } from './services/productService'
 import SearchBar from './components/SearchBar'
+import CategoryFilter from './components/CategoryFilter'
+import { prefetchDNS } from 'react-dom'
 
 function App() {
 
@@ -11,14 +13,16 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('all')
 
   const filteredProducts = products.filter((product) => {
     const nombre = product.name.toLowerCase()
     const busqueda = searchTerm.toLowerCase()
+    
+    const matchesCategory = selectedCategory === 'all' || selectedCategory === product.category
+    const matchesSearch = nombre.includes(busqueda)
 
-    if (nombre.includes(busqueda)) return true
-
-    return false
+    return matchesCategory && matchesSearch
   })
 
   useEffect(() => {
@@ -56,10 +60,17 @@ function App() {
       <main className='catalog'>
         <h2>Nuestros productos</h2>
 
-        <SearchBar
-          value={searchTerm}
-          onSearchChange={setSearchTerm}
-        />
+        <div className="catalog-filters">
+          <SearchBar
+            value={searchTerm}
+            onSearchChange={setSearchTerm}
+          />
+
+          <CategoryFilter
+            value={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+          />
+        </div>
 
         {loading ? (
           <p>Cargando productos...</p>

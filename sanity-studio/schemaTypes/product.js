@@ -2,7 +2,7 @@ import {defineField, defineType } from 'sanity';
 
 export const productType = defineType({
     name: 'product',
-    title: 'Product',
+    title: 'Producto',
     type: 'document',
 
     groups: [
@@ -139,11 +139,12 @@ export const productType = defineType({
         },
 
         prepare({title, price, inStock, media}) {
-            const stockState = inStock ? 'Disponible' : 'Agotado'
+            const stockState = inStock === false ? 'Agotado' : 'Disponible'
+            const priceState = typeof price === 'number' ? `$${price}` : 'Sin precio'
 
             return{
                 title: title,
-                subtitle: `$${price} - ${stockState}`, 
+                subtitle: `${priceState} - ${stockState}`, 
                 media: media
             }
         }
