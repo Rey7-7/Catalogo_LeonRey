@@ -1,4 +1,6 @@
-function ProductCard({name, shortDescription, price, inStock, featured, image}){
+import { Link } from "react-router"
+
+function ProductCard({name, shortDescription, price, inStock, featured, image, slug}){
 
 const phoneNumber = '5210000000000'
 
@@ -17,6 +19,9 @@ const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mess
             <h3>{name}</h3>
             <p>{shortDescription}</p>
             <p className="product-price">Precio: ${price}</p>
+            <Link className="product-details-link" to={`/productos/${slug}`}>
+              Ver detalles
+            </Link>
             {inStock ? (
                 <a
                     className="product-link"
