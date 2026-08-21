@@ -3,25 +3,28 @@ import { Link } from "react-router"
 function ProductCard({name, shortDescription, price, inStock, featured, image, slug}){
 
 const phoneNumber = '5210000000000'
-
 const message = `Hola, me interesa el producto ${name} con precio de $${price}.`
-
 const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+const isFeatured = featured && inStock
 
     return (
-        <article className={featured ? 'product-card product-card--featured' : 'product-card'}>
-            {featured && (<span className="featured-badge">Destacado</span>)}
+        <article className={isFeatured ? 'product-card product-card--featured' : 'product-card'}>
+            {isFeatured && (<span className="featured-badge">Destacado</span>)}
             <img 
             className="product-image"
             src={image}
             alt={name}
             />
-            <h3>{name}</h3>
+            <h3>
+                <Link
+                className="product-card-link"
+                to={`/productos/${slug}`}
+                >
+                {name}
+                </Link>
+            </h3>
             <p>{shortDescription}</p>
             <p className="product-price">Precio: ${price}</p>
-            <Link className="product-details-link" to={`/productos/${slug}`}>
-              Ver detalles
-            </Link>
             {inStock ? (
                 <a
                     className="product-link"
