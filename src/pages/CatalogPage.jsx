@@ -1,6 +1,5 @@
 import '../App.css'
 import ProductCard from '../components/ProductCard'
-import { products } from '../data/products'
 import { useEffect, useState } from 'react'
 import { getProducts } from '../services/productService'
 import SearchBar from '../components/SearchBar'
@@ -48,17 +47,23 @@ function CatalogPage() {
   return (
     <div className='app'>
       <header className='header'>
-        <h1>Novedades y regalos de TochoMorocho</h1>
-        <p>Ofrecemos una gran variedad de productos.</p>
-        <p>
-          Desde materiales escolares, accesorios para motocicletas,
-          electrodomésticos y más.
+       <div className="header-content"></div>
+        <p className="header-eyebrow">Directo hasta tu puerta</p>
+        
+        <h1>Novedades y regalos DeTochoMorocho</h1>
+
+        <p className="header-description">
+          Encuentra artículos para el hogar, electrónica, accesorios,
+          herramientas y más.
         </p>
-        <p>¡Contamos con servicio a domicilio en todo Altotonga!</p>
+        
+        <p className="header-delivery">
+          Servicio a domicilio en Altotonga y sus alrededores.
+        </p>
       </header>
 
-      <main className='catalog'>
-        <h2>Nuestros productos</h2>
+      <main className='catalog' id="catalog">
+        <h2>Explorar productos</h2>
 
         <div className="catalog-filters">
           <SearchBar

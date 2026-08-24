@@ -8,7 +8,8 @@ function ProductDetailPage() {
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const phoneNumber = '5210000000000'
+  const [previewImage, setPreviewImage] = useState(null)
+  const phoneNumber = '522261009312' 
 
   useEffect(() => {
       async function loadProduct(){
@@ -34,6 +35,27 @@ function ProductDetailPage() {
         loadProduct()
     }, [slug])
 
+
+    useEffect(() => {
+      if (!previewImage) return
+
+      function handleKeyDown(event) {
+         if (event.key === 'Escape') {
+            setPreviewImage(null)
+         }
+      }
+
+      const previousOverflow = document.body.style.overflow
+
+      document.body.style.overflow = 'hidden'
+      window.addEventListener('keydown', handleKeyDown)
+
+      return () => {
+         document.body.style.overflow = previousOverflow
+         window.removeEventListener('keydown', handleKeyDown)
+      }
+      }, [previewImage])
+
    const whatsappUrl = product
    ? `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
          `Hola, me interesa el producto ${product.name} con precio de $${product.price}.`
@@ -52,9 +74,13 @@ function ProductDetailPage() {
          </section>
       ) : product === null ? (
          <section className="product-detail-state product-detail-state--empty">
-         <p>No se encontró el producto.</p>
+         <h1>No se encontró el producto.</h1>
+            <Link className = "product-detail-back" to="/">
+                  ← Volver al catálogo
+            </Link>
          </section>
       ) : (
+         
          <article className="product-detail">
             <Link className = "product-detail-back" to="/">
                ← Volver al catálogo
@@ -64,11 +90,20 @@ function ProductDetailPage() {
                <div className="product-detail-gallery">
                   {product.images.map((image, index) => (
                   <img
-                     key={image._key}
-                     className="product-detail-image"
-                     src={image.url}
-                     alt={image.alt || `${product.name}, imagen ${index + 1}`}
-                     loading={index === 0 ? 'eager' : 'lazy'}
+                      key={image._key}
+                      className="product-detail-image"
+                      src={image.url}
+                      alt={image.alt || `${product.name}, imagen ${index + 1}`}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => setPreviewImage(image)}
+                      onKeyDown={(event) => {
+                         if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault()
+                            setPreviewImage(image)
+                         }
+                      }}
                   />
                   ))}
                </div>
@@ -118,6 +153,32 @@ function ProductDetailPage() {
           </div>
          </article>
       )}
+
+      {previewImage && (
+         <div
+            className="image-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Vista ampliada del producto"
+            onClick={() => setPreviewImage(null)}
+         >
+            <button
+               type="button"
+               className="image-modal-close"
+               onClick={() => setPreviewImage(null)}
+               aria-label="Cerrar imagen"
+            >
+               ×
+            </button>
+
+            <img
+               className="image-modal-image"
+               src={previewImage.url}
+               alt={previewImage.alt || product?.name}
+               onClick={(event) => event.stopPropagation()}
+            />
+         </div>
+         )}
    </main>
    )
  }
