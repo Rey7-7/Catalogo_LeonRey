@@ -107,8 +107,8 @@ function CatalogPage() {
       </main>
 
       <footer className='footer'>
-        <p>Puedes contactarnos mediante nuestras redes sociales.</p>
-        <p>También puedes escribirnos por WhatsApp al número: ...</p>
+        <p>Tambien puedes contactarnos mediante nuestras redes sociales.</p>
+        <p>O escribirnos por WhatsApp al número: ...</p>
         <p>Realizamos envíos en Altotonga y sus alrededores.</p>
       </footer>
     </div>
